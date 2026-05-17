@@ -141,15 +141,16 @@ class MastermindGame {
 
     cycleColor(direction) {
         const currentColor = this.currentGuess[this.selectedSlot];
-        let currentIndex = this.colors.indexOf(currentColor);
-        
+        const availableColors = this.colors.slice(0, this.currentDifficulty.colors);
+        let currentIndex = availableColors.indexOf(currentColor);
+
         if (currentIndex === -1) {
             currentIndex = 0;
         } else {
-            currentIndex = (currentIndex + direction + this.colors.length) % this.colors.length;
+            currentIndex = (currentIndex + direction + availableColors.length) % availableColors.length;
         }
-        
-        const newColor = this.colors[currentIndex];
+
+        const newColor = availableColors[currentIndex];
         this.placeColor(newColor);
         soundManager.selectColor();
     }
@@ -179,7 +180,9 @@ class MastermindGame {
     }
 
     generateSecretCode() {
-        const shuffled = [...this.colors].sort(() => Math.random() - 0.5);
+        // 只用当前难度对应的颜色来生成密码
+        const availableColors = this.colors.slice(0, this.currentDifficulty.colors);
+        const shuffled = [...availableColors].sort(() => Math.random() - 0.5);
         return shuffled.slice(0, this.codeLength);
     }
 
@@ -484,18 +487,17 @@ class MastermindGame {
 
         const modeGrid = document.getElementById('mode-grid');
         const modeSide = document.getElementById('mode-side');
-        const modeSwitch = document.querySelector('.mode-switch');
-        const thumb = modeSwitch.querySelector('.mode-thumb');
+        const thumb = document.querySelector('.mode-thumb');
 
         modeGrid.classList.remove('active');
         modeSide.classList.remove('active');
 
         if (mode === 'grid') {
             modeGrid.classList.add('active');
-            thumb.style.left = '3px';
+            thumb.style.transform = 'translateX(3px)';
         } else {
             modeSide.classList.add('active');
-            thumb.style.left = 'calc(50% - 3px)';
+            thumb.style.transform = 'translateX(35px)';
         }
     }
 
