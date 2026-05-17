@@ -1,14 +1,30 @@
 class MastermindGame {
     constructor() {
-        this.colors = ['red', 'blue', 'green', 'yellow'];
+        // 7色定义 - 按用户指定顺序
+        this.colors = ['red', 'green', 'orange', 'blue', 'yellow', 'purple', 'cyan'];
         this.colorRGB = {
             'red': { r: 231, g: 76, b: 60 },
-            'blue': { r: 52, g: 152, b: 219 },
             'green': { r: 46, g: 204, b: 113 },
-            'yellow': { r: 241, g: 196, b: 15 }
+            'orange': { r: 230, g: 126, b: 34 },
+            'blue': { r: 52, g: 152, b: 219 },
+            'yellow': { r: 241, g: 196, b: 15 },
+            'purple': { r: 155, g: 89, b: 182 },
+            'cyan': { r: 0, g: 188, b: 212 }
         };
         this.colorThreshold = 5;
-        this.codeLength = 4;
+
+        // 难度等级定义
+        this.DIFFICULTY = {
+            EASY: { name: '简单', codeLength: 4, colors: 4 },
+            NORMAL: { name: '普通', codeLength: 5, colors: 5 },
+            HARD: { name: '困难', codeLength: 6, colors: 6 },
+            EXTREME: { name: '极难', codeLength: 7, colors: 7 }
+        };
+
+        // 从 localStorage 读取已解锁的难度
+        this.unlockedDifficulty = parseInt(localStorage.getItem('unlockedDifficulty')) || 1;
+        this.currentDifficulty = this.DIFFICULTY.EASY;
+        this.codeLength = this.currentDifficulty.codeLength;
         this.maxGuesses = 7;
         this.secretCode = [];
         this.currentGuess = [null, null, null, null];
@@ -29,7 +45,6 @@ class MastermindGame {
     }
 
     bindEvents() {
-        document.getElementById('new-game-btn').addEventListener('click', () => this.startNewGame());
         document.getElementById('submit-btn').addEventListener('click', () => this.submitGuess());
         document.getElementById('modal-btn').addEventListener('click', () => {
             this.hideModal();
@@ -47,15 +62,11 @@ class MastermindGame {
             });
         });
 
-        const modeGrid = document.getElementById('mode-grid');
-        const modeSide = document.getElementById('mode-side');
-        
-        modeGrid.addEventListener('click', () => {
-            this.changeDisplayMode('grid');
-            soundManager.modeSwitch();
-        });
-        modeSide.addEventListener('click', () => {
-            this.changeDisplayMode('side');
+        document.querySelector('.mode-switch').addEventListener('click', (e) => {
+            const btn = e.target.closest('.mode-btn');
+            if (!btn) return;
+            const mode = btn.id === 'mode-grid' ? 'grid' : 'side';
+            this.changeDisplayMode(mode);
             soundManager.modeSwitch();
         });
 
@@ -143,9 +154,15 @@ class MastermindGame {
         soundManager.selectColor();
     }
 
-    startNewGame() {
+    startNewGame(difficulty) {
+        // 设置难度
+        if (difficulty) {
+            this.currentDifficulty = difficulty;
+            this.codeLength = difficulty.codeLength;
+        }
+
         this.secretCode = this.generateSecretCode();
-        this.currentGuess = [null, null, null, null];
+        this.currentGuess = new Array(this.codeLength).fill(null);
         this.guessHistory = [];
         this.remainingGuesses = this.maxGuesses;
         this.currentRow = 0;
@@ -157,6 +174,7 @@ class MastermindGame {
         this.updateUI();
         this.clearSideFeedback();
         this.updateActiveIndicator();
+        this.updateColorSelector();
         soundManager.gameStart();
     }
 
@@ -290,9 +308,12 @@ class MastermindGame {
     getColorHex(color) {
         const colorMap = {
             'red': '#e74c3c',
-            'blue': '#3498db',
             'green': '#2ecc71',
-            'yellow': '#f1c40f'
+            'orange': '#e67e22',
+            'blue': '#3498db',
+            'yellow': '#f1c40f',
+            'purple': '#9b59b6',
+            'cyan': '#00bcd4'
         };
         return colorMap[color] || '#111111';
     }
@@ -444,7 +465,7 @@ class MastermindGame {
             const nextSlots = nextRowEl.querySelectorAll('.guess-slot');
             nextSlots.forEach(slot => slot.classList.add('editable'));
 
-            this.currentGuess = [null, null, null, null];
+            this.currentGuess = new Array(this.codeLength).fill(null);
             this.selectedSlot = 0;
             this.updateActiveIndicator();
         }
@@ -464,16 +485,17 @@ class MastermindGame {
         const modeGrid = document.getElementById('mode-grid');
         const modeSide = document.getElementById('mode-side');
         const modeSwitch = document.querySelector('.mode-switch');
+        const thumb = modeSwitch.querySelector('.mode-thumb');
 
         modeGrid.classList.remove('active');
         modeSide.classList.remove('active');
 
         if (mode === 'grid') {
             modeGrid.classList.add('active');
-            modeSwitch.setAttribute('data-mode', 'grid');
+            thumb.style.left = '3px';
         } else {
             modeSide.classList.add('active');
-            modeSwitch.setAttribute('data-mode', 'side');
+            thumb.style.left = 'calc(50% - 3px)';
         }
     }
 
@@ -509,8 +531,28 @@ class MastermindGame {
         document.getElementById('modal').classList.remove('show');
     }
 
+    updateColorSelector() {
+        const colorCount = this.currentDifficulty.colors;
+        document.querySelectorAll('.color-btn').forEach((btn, index) => {
+            // 按顺序: red(0), green(1), orange(2), blue(3), yellow(4), purple(5), cyan(6)
+            if (index < colorCount) {
+                btn.classList.remove('disabled');
+                btn.style.pointerEvents = '';
+            } else {
+                btn.classList.add('disabled');
+                btn.style.pointerEvents = 'none';
+            }
+        });
+    }
+
+    setDifficulty(difficulty) {
+        this.currentDifficulty = difficulty;
+        this.codeLength = difficulty.codeLength;
+        this.startNewGame(difficulty);
+    }
+
     handleKeyPress(e) {
-        if (e.key >= '1' && e.key <= '4') {
+        if (e.key >= '1' && e.key <= '7') {
             const index = parseInt(e.key) - 1;
             const slots = document.querySelectorAll('.guess-row.current-row .guess-slot');
             if (slots[index]) {
@@ -520,12 +562,23 @@ class MastermindGame {
 
         const colorMap = {
             'r': 'red',
-            'b': 'blue',
             'g': 'green',
+            'o': 'orange',
+            'b': 'blue',
             'y': 'yellow',
             'p': 'purple',
-            'o': 'orange'
+            'c': 'cyan'
         };
+
+        if (colorMap[e.key.toLowerCase()] && !this.gameOver) {
+            const color = colorMap[e.key.toLowerCase()];
+            // 检查这个颜色是否在当前难度中可用
+            const colorIndex = this.colors.indexOf(color);
+            if (colorIndex < this.currentDifficulty.colors) {
+                this.placeColor(color);
+                soundManager.selectColor();
+            }
+        }
 
         if (e.key === 'Enter' && !this.gameOver) {
             this.submitGuess();
