@@ -62,11 +62,13 @@ class MastermindGame {
             });
         });
 
-        document.querySelector('.mode-switch').addEventListener('click', (e) => {
-            const btn = e.target.closest('.mode-btn');
-            if (!btn) return;
-            const mode = btn.id === 'mode-grid' ? 'grid' : 'side';
-            this.changeDisplayMode(mode);
+        document.querySelector('.mode-icon-left').addEventListener('click', () => {
+            this.changeDisplayMode('grid');
+            soundManager.modeSwitch();
+        });
+
+        document.querySelector('.mode-icon-right').addEventListener('click', () => {
+            this.changeDisplayMode('side');
             soundManager.modeSwitch();
         });
 
@@ -483,21 +485,12 @@ class MastermindGame {
     }
 
     changeDisplayMode(mode) {
-        this.displayMode = mode;
-
-        const modeGrid = document.getElementById('mode-grid');
-        const modeSide = document.getElementById('mode-side');
-        const thumb = document.querySelector('.mode-thumb');
-
-        modeGrid.classList.remove('active');
-        modeSide.classList.remove('active');
+        const modeSwitch = document.querySelector('.mode-switch');
 
         if (mode === 'grid') {
-            modeGrid.classList.add('active');
-            thumb.style.transform = 'translateX(3px)';
+            modeSwitch.classList.remove('side-mode');
         } else {
-            modeSide.classList.add('active');
-            thumb.style.transform = 'translateX(35px)';
+            modeSwitch.classList.add('side-mode');
         }
     }
 
