@@ -120,12 +120,10 @@ body {
 .board-right {
     width: 60px;
     background: rgba(15, 15, 15, 0.6);
-    border-radius: 0;
-    padding: 0;
-    margin: -6px -10px -6px 0;
-    box-shadow:
-        inset 0 2px 5px rgba(0, 0, 0, 0.6),
-        0 1px 0 rgba(255, 255, 255, 0.02);
+    border-radius: 0px 8px 8px 0px;
+    padding: 10px;
+    margin: -10px -10px -10px 0;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.02);
     display: flex;
     flex-direction: column;
 }
@@ -133,13 +131,13 @@ body {
 .guess-rows {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 6px;
 }
 
 .feedback-rows {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 6px;
 }
 
 .board-row,
@@ -156,12 +154,12 @@ body {
     padding: 0;
     justify-content: center;
     align-items: center;
-    min-height: 52px;
+    min-height: 56px;
 }
 
 .slots-container {
     display: flex;
-    gap: 12px;
+    gap: 6px;
     justify-content: space-between;
     width: 100%;
 }
@@ -171,8 +169,8 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 2px;
-    padding: 2px 1px;
-    flex: 1;
+    padding: 2px;
+    flex: 0 0 auto;
     background: rgba(20, 20, 20, 0.5);
     border-radius: 4px;
     box-shadow:
@@ -306,18 +304,26 @@ body {
 }
 
 .sidebar {
-    width: 60px;
+    width: 70px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding: 10px 5px;
-    background: linear-gradient(180deg, #4a7c45, #3d6b35, #2d5428);
-    border-radius: 10px;
-    border: 2px solid #1a1a1a;
+    gap: 12px;
+    padding: 8px 5px;
+    background: transparent;
+}
+
+.submit-btn-slot {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #0a0a0a, #151515);
     box-shadow:
-        inset 0 2px 0 rgba(255, 255, 255, 0.1),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
-        0 3px 6px rgba(0, 0, 0, 0.3);
+        inset 0 3px 8px rgba(0, 0, 0, 0.9),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
 }
 
 .status-points {
@@ -380,58 +386,114 @@ body {
 }
 
 .submit-btn {
-    background: linear-gradient(180deg, #ff8c5a, #ff6b3d, #e55a2b);
-    color: white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    width: 54px;
+    height: 54px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    border-radius: 50%;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 2px,
+            rgba(0, 0, 0, 0.08) 2px,
+            rgba(0, 0, 0, 0.08) 3px
+        ),
+        linear-gradient(180deg, #ff8c5a, #ff6b3d, #e55a2b);
     box-shadow:
         0 3px 0 #c44a1f,
         0 4px 6px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.1s ease;
 }
 
 .submit-btn:hover {
-    background: linear-gradient(180deg, #ffa070, #ff8c5a, #ff6b3d);
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 2px,
+            rgba(0, 0, 0, 0.06) 2px,
+            rgba(0, 0, 0, 0.06) 3px
+        ),
+        linear-gradient(180deg, #ffa070, #ff8c5a, #ff6b3d);
 }
 
 .submit-btn:active {
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 2px,
+            rgba(0, 0, 0, 0.12) 2px,
+            rgba(0, 0, 0, 0.12) 3px
+        ),
+        linear-gradient(180deg, #e55a2b, #cc4a1b, #b33a0f);
     box-shadow:
         0 1px 0 #c44a1f,
         0 2px 3px rgba(0, 0, 0, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateY(2px);
 }
 
 .mode-switch {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    background: linear-gradient(180deg, #1a1a1a, #0d0d0d);
+    position: relative;
+    background: linear-gradient(180deg, #0a0a0a, #151515);
+    border-radius: 20px;
     padding: 4px;
-    border-radius: 5px;
     box-shadow:
-        inset 0 2px 4px rgba(0, 0, 0, 0.5),
-        0 1px 0 rgba(255, 255, 255, 0.05);
+        inset 0 2px 6px rgba(0, 0, 0, 0.8),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.mode-track {
+    display: flex;
+    position: relative;
 }
 
 .mode-btn {
-    padding: 5px 3px;
+    position: relative;
+    width: 50px;
+    height: 32px;
     border: none;
     background: transparent;
-    color: #888;
-    font-size: 8px;
+    color: #555;
+    font-size: 7px;
     font-weight: 600;
     cursor: pointer;
-    border-radius: 3px;
-    transition: all 0.15s ease;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.mode-btn:hover {
-    color: #aaa;
-    background: rgba(255, 255, 255, 0.05);
+.mode-thumb {
+    position: absolute;
+    top: 4px;
+    width: 44px;
+    height: 24px;
+    background: linear-gradient(180deg, #555, #444, #333);
+    border-radius: 12px;
+    box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+        0 3px 0 #222,
+        0 4px 6px rgba(0, 0, 0, 0.4);
+    transition: transform 0.1s ease;
+    z-index: 0;
+}
+
+.mode-switch[data-mode="grid"] .mode-thumb {
+    transform: translateX(0);
+}
+
+.mode-switch[data-mode="side"] .mode-thumb {
+    transform: translateX(50px);
 }
 
 .mode-btn.active {
-    background: linear-gradient(180deg, #667eea, #5568d3);
-    color: white;
+    color: #ddd;
 }
 
 .side-feedback {

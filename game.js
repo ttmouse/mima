@@ -226,7 +226,10 @@ class MastermindGame {
                 }
             });
         } else {
-            const feedbackPoints = rowEl.querySelectorAll('.feedback-point');
+            const feedbackRow = document.querySelector(`.feedback-row[data-row="${this.currentRow}"]`);
+            if (!feedbackRow) return;
+            
+            const feedbackPoints = feedbackRow.querySelectorAll('.feedback-point');
             const feedback = this.calculateFeedback(guess, secret);
             let pointIndex = 0;
             
@@ -460,20 +463,21 @@ class MastermindGame {
 
         const modeGrid = document.getElementById('mode-grid');
         const modeSide = document.getElementById('mode-side');
+        const modeSwitch = document.querySelector('.mode-switch');
 
         modeGrid.classList.remove('active');
         modeSide.classList.remove('active');
 
         if (mode === 'grid') {
             modeGrid.classList.add('active');
+            modeSwitch.setAttribute('data-mode', 'grid');
         } else {
             modeSide.classList.add('active');
+            modeSwitch.setAttribute('data-mode', 'side');
         }
     }
 
     updateUI() {
-        document.getElementById('remaining-guesses').textContent = this.remainingGuesses;
-
         const submitBtn = document.getElementById('submit-btn');
 
         if (this.gameOver) {

@@ -244,28 +244,24 @@
             </div>
 
             <div class="sidebar">
-                <div class="status-points">
-                    <div class="status-point" data-index="0"></div>
-                    <div class="status-point" data-index="1"></div>
-                    <div class="status-point" data-index="2"></div>
-                    <div class="status-point" data-index="3"></div>
-                </div>
-
                 <button id="new-game-btn" class="physical-btn new-game-btn">
                     <span class="btn-text">新游戏</span>
                 </button>
 
-                <button id="submit-btn" class="physical-btn submit-btn">
-                    <span class="btn-text">提交</span>
-                </button>
+                <div class="mode-switch" data-mode="grid">
+                    <div class="mode-track">
+                        <button id="mode-grid" class="mode-btn active">
+                            <span class="mode-text">底部</span>
+                        </button>
+                        <button id="mode-side" class="mode-btn">
+                            <span class="mode-text">侧边</span>
+                        </button>
+                        <div class="mode-thumb"></div>
+                    </div>
+                </div>
 
-                <div class="mode-switch">
-                    <button id="mode-grid" class="mode-btn active">
-                        <span class="mode-text">底部模式</span>
-                    </button>
-                    <button id="mode-side" class="mode-btn">
-                        <span class="mode-text">侧边模式</span>
-                    </button>
+                <div class="submit-btn-slot">
+                    <button id="submit-btn" class="submit-btn" title="提交"></button>
                 </div>
             </div>
         </div>
