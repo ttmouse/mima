@@ -62,12 +62,12 @@ class MastermindGame {
             });
         });
 
-        document.querySelector('.mode-icon-left').addEventListener('click', () => {
+        document.querySelector('.mode-hotspot-left').addEventListener('click', () => {
             this.changeDisplayMode('grid');
             soundManager.modeSwitch();
         });
 
-        document.querySelector('.mode-icon-right').addEventListener('click', () => {
+        document.querySelector('.mode-hotspot-right').addEventListener('click', () => {
             this.changeDisplayMode('side');
             soundManager.modeSwitch();
         });
@@ -251,21 +251,30 @@ class MastermindGame {
         } else {
             const feedbackRow = document.querySelector(`.feedback-row[data-row="${this.currentRow}"]`);
             if (!feedbackRow) return;
-            
+
             const feedbackPoints = feedbackRow.querySelectorAll('.feedback-point');
+            // Clear all feedback points first
+            feedbackPoints.forEach(point => point.className = 'feedback-point');
             const feedback = this.calculateFeedback(guess, secret);
             let pointIndex = 0;
-            
+
             for (let i = 0; i < feedback.correct; i++) {
                 if (feedbackPoints[pointIndex]) {
                     feedbackPoints[pointIndex].classList.add('correct');
                     pointIndex++;
                 }
             }
-            
+
             for (let i = 0; i < feedback.misplaced; i++) {
                 if (feedbackPoints[pointIndex]) {
                     feedbackPoints[pointIndex].classList.add('wrong');
+                    pointIndex++;
+                }
+            }
+
+            for (let i = 0; i < feedback.wrong; i++) {
+                if (feedbackPoints[pointIndex]) {
+                    feedbackPoints[pointIndex].classList.add('absent');
                     pointIndex++;
                 }
             }
