@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>密码机 - Mastermind</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="color-selector">
+            <button class="color-btn" data-color="red" style="background-color: #e74c3c;"></button>
+            <button class="color-btn" data-color="blue" style="background-color: #3498db;"></button>
+            <button class="color-btn" data-color="green" style="background-color: #2ecc71;"></button>
+            <button class="color-btn" data-color="yellow" style="background-color: #f1c40f;"></button>
+        </div>
+
+        <div class="game-layout">
+            <div id="game-board" class="game-board">
+                <!-- 左侧格子区域 - 整体一个背景 -->
+                <div class="board-left">
+                    <div class="guess-rows">
+                        <div class="board-row guess-row current-row" data-row="0">
+                            <div class="slots-container">
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot editable" data-index="0"></div>
+                                    <div class="status-light" data-index="0"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot editable" data-index="1"></div>
+                                    <div class="status-light" data-index="1"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot editable" data-index="2"></div>
+                                    <div class="status-light" data-index="2"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot editable" data-index="3"></div>
+                                    <div class="status-light" data-index="3"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="board-row guess-row" data-row="1">
+                            <div class="slots-container">
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="0"></div>
+                                    <div class="status-light" data-index="0"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="1"></div>
+                                    <div class="status-light" data-index="1"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="2"></div>
+                                    <div class="status-light" data-index="2"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="3"></div>
+                                    <div class="status-light" data-index="3"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="board-row guess-row" data-row="2">
+                            <div class="slots-container">
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="0"></div>
+                                    <div class="status-light" data-index="0"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="1"></div>
+                                    <div class="status-light" data-index="1"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="2"></div>
+                                    <div class="status-light" data-index="2"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="3"></div>
+                                    <div class="status-light" data-index="3"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="board-row guess-row" data-row="3">
+                            <div class="slots-container">
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="0"></div>
+                                    <div class="status-light" data-index="0"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="1"></div>
+                                    <div class="status-light" data-index="1"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="2"></div>
+                                    <div class="status-light" data-index="2"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="3"></div>
+                                    <div class="status-light" data-index="3"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="board-row guess-row" data-row="4">
+                            <div class="slots-container">
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="0"></div>
+                                    <div class="status-light" data-index="0"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="1"></div>
+                                    <div class="status-light" data-index="1"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="2"></div>
+                                    <div class="status-light" data-index="2"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="3"></div>
+                                    <div class="status-light" data-index="3"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="board-row guess-row" data-row="5">
+                            <div class="slots-container">
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="0"></div>
+                                    <div class="status-light" data-index="0"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="1"></div>
+                                    <div class="status-light" data-index="1"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="2"></div>
+                                    <div class="status-light" data-index="2"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="3"></div>
+                                    <div class="status-light" data-index="3"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="board-row guess-row" data-row="6">
+                            <div class="slots-container">
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="0"></div>
+                                    <div class="status-light" data-index="0"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="1"></div>
+                                    <div class="status-light" data-index="1"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="2"></div>
+                                    <div class="status-light" data-index="2"></div>
+                                </div>
+                                <div class="slot-wrapper">
+                                    <div class="code-slot guess-slot" data-index="3"></div>
+                                    <div class="status-light" data-index="3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧反馈区域 - 整体一个背景 -->
+                <div class="board-right">
+                    <div class="feedback-rows">
+                        <div class="feedback-row current-row" data-row="0">
+                            <div class="row-feedback">
+                                <div class="feedback-point" data-index="0"></div>
+                                <div class="feedback-point" data-index="1"></div>
+                                <div class="feedback-point" data-index="2"></div>
+                                <div class="feedback-point" data-index="3"></div>
+                            </div>
+                        </div>
+
+                        <div class="feedback-row" data-row="1">
+                            <div class="row-feedback">
+                                <div class="feedback-point" data-index="0"></div>
+                                <div class="feedback-point" data-index="1"></div>
+                                <div class="feedback-point" data-index="2"></div>
+                                <div class="feedback-point" data-index="3"></div>
+                            </div>
+                        </div>
+
+                        <div class="feedback-row" data-row="2">
+                            <div class="row-feedback">
+                                <div class="feedback-point" data-index="0"></div>
+                                <div class="feedback-point" data-index="1"></div>
+                                <div class="feedback-point" data-index="2"></div>
+                                <div class="feedback-point" data-index="3"></div>
+                            </div>
+                        </div>
+
+                        <div class="feedback-row" data-row="3">
+                            <div class="row-feedback">
+                                <div class="feedback-point" data-index="0"></div>
+                                <div class="feedback-point" data-index="1"></div>
+                                <div class="feedback-point" data-index="2"></div>
+                                <div class="feedback-point" data-index="3"></div>
+                            </div>
+                        </div>
+
+                        <div class="feedback-row" data-row="4">
+                            <div class="row-feedback">
+                                <div class="feedback-point" data-index="0"></div>
+                                <div class="feedback-point" data-index="1"></div>
+                                <div class="feedback-point" data-index="2"></div>
+                                <div class="feedback-point" data-index="3"></div>
+                            </div>
+                        </div>
+
+                        <div class="feedback-row" data-row="5">
+                            <div class="row-feedback">
+                                <div class="feedback-point" data-index="0"></div>
+                                <div class="feedback-point" data-index="1"></div>
+                                <div class="feedback-point" data-index="2"></div>
+                                <div class="feedback-point" data-index="3"></div>
+                            </div>
+                        </div>
+
+                        <div class="feedback-row" data-row="6">
+                            <div class="row-feedback">
+                                <div class="feedback-point" data-index="0"></div>
+                                <div class="feedback-point" data-index="1"></div>
+                                <div class="feedback-point" data-index="2"></div>
+                                <div class="feedback-point" data-index="3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="side-feedback" class="side-feedback" style="display: none;">
+                    <div class="section-label">反馈</div>
+                    <div id="side-feedback-display" class="side-feedback-display"></div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="status-points">
+                    <div class="status-point" data-index="0"></div>
+                    <div class="status-point" data-index="1"></div>
+                    <div class="status-point" data-index="2"></div>
+                    <div class="status-point" data-index="3"></div>
+                </div>
+
+                <button id="new-game-btn" class="physical-btn new-game-btn">
+                    <span class="btn-text">新游戏</span>
+                </button>
+
+                <button id="submit-btn" class="physical-btn submit-btn">
+                    <span class="btn-text">提交</span>
+                </button>
+
+                <div class="mode-switch">
+                    <button id="mode-grid" class="mode-btn active">
+                        <span class="mode-text">底部模式</span>
+                    </button>
+                    <button id="mode-side" class="mode-btn">
+                        <span class="mode-text">侧边模式</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <h2 id="modal-title"></h2>
+                <p id="modal-message"></p>
+                <div id="modal-secret" class="modal-secret"></div>
+                <button id="modal-btn" class="btn btn-primary">再玩一次</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="sound.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
