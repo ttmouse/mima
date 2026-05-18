@@ -866,11 +866,28 @@ class MastermindGame {
                     const div = document.createElement('div');
                     div.className = 'record-item' + (record.won ? ' won' : ' lost');
                     div.dataset.id = record.id;
+
+                    // 获取最后一次猜测的颜色和数字
+                    const lastGuess = record.guessHistory.length > 0
+                        ? record.guessHistory[record.guessHistory.length - 1].guess
+                        : [];
+                    const lastFeedback = record.guessHistory.length > 0
+                        ? record.guessHistory[record.guessHistory.length - 1].feedback
+                        : null;
+
                     div.innerHTML = `
                         <span class="record-date" title="${this.formatFullDate(record.timestamp)}">${this.formatDate(record.timestamp)}</span>
                         <span class="record-level">L0${record.difficulty}</span>
+                        <div class="record-colors">
+                            ${lastGuess.map((c, i) => {
+                                const colorIndex = this.colors.indexOf(c);
+                                const num = colorIndex >= 0 ? colorIndex + 1 : '';
+                                const isCorrect = lastFeedback && lastFeedback.positions && lastFeedback.positions[i] === 'correct';
+                                const isMisplaced = lastFeedback && lastFeedback.positions && lastFeedback.positions[i] === 'misplaced';
+                                return `<div class="record-color ${isCorrect ? 'correct' : ''} ${isMisplaced ? 'misplaced' : ''}" style="background:${this.getColorHex(c)}">${num}</div>`;
+                            }).join('')}
+                        </div>
                         <span class="record-result">${record.won ? '✓' : '✗'}</span>
-                        <span class="record-attempts">${record.attempts}次</span>
                     `;
                     div.addEventListener('click', () => this.showRecordDetail(record));
                     recentContainer.appendChild(div);

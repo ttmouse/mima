@@ -344,6 +344,7 @@ body {
         inset 0 1px 2px rgba(0, 0, 0, 0.3),
         0 0 8px rgba(255, 255, 255, 0.6),
         0 0 14px rgba(255, 255, 255, 0.3);
+    opacity: 0.6;
 }
 
 .row-feedback {
@@ -375,6 +376,7 @@ body {
         inset 0 -1px 2px rgba(0, 0, 0, 0.1),
         0 0 6px rgba(255, 255, 255, 0.9),
         0 0 10px rgba(255, 255, 255, 0.5);
+    opacity: 0.6;
 }
 
 /* 完全错误的颜色 - 深暗色带微光 */
@@ -920,7 +922,7 @@ body {
 
     .record-item {
         display: grid;
-        grid-template-columns: 36px 32px 18px 28px;
+        grid-template-columns: 36px 32px 1fr 20px;
         align-items: center;
         gap: 4px;
         background: rgba(255, 255, 255, 0.1);
@@ -958,12 +960,35 @@ body {
         font-weight: 600;
     }
 
-    .record-result {
-        font-weight: bold;
+    .record-colors {
+        display: flex;
+        gap: 2px;
     }
 
-    .record-attempts {
-        color: #888;
+    .record-color {
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+        font-size: 8px;
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+
+    .record-color.correct {
+        box-shadow: 0 0 6px rgba(46, 204, 113, 0.8), 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+
+    .record-color.misplaced {
+        opacity: 0.5;
+    }
+
+    .record-result {
+        font-weight: bold;
     }
 
     .no-record {
