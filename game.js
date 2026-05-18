@@ -35,6 +35,7 @@ class MastermindGame {
         this.selectedColor = null;
         this.gameOver = false;
         this.displayMode = 'grid';
+        this.showNumbers = false;
 
         this.init();
     }
@@ -121,8 +122,27 @@ class MastermindGame {
     }
 
     moveToNextSlot() {
-        const nextIndex = (this.selectedSlot + 1) % this.codeLength;
-        this.selectedSlot = nextIndex;
+        // 先向右查找待确认的格子（currentGuess 为 null）
+        for (let i = 1; i < this.codeLength; i++) {
+            const nextIndex = (this.selectedSlot + i) % this.codeLength;
+            if (this.currentGuess[nextIndex] === null) {
+                this.selectedSlot = nextIndex;
+                this.updateActiveIndicator();
+                return;
+            }
+        }
+
+        // 没有待确认格子，查找已确认的格子
+        for (let i = 1; i < this.codeLength; i++) {
+            const nextIndex = (this.selectedSlot + i) % this.codeLength;
+            if (this.currentGuess[nextIndex] !== null) {
+                this.selectedSlot = nextIndex;
+                this.updateActiveIndicator();
+                return;
+            }
+        }
+
+        // 没有其他格子了，保持在当前位置
         this.updateActiveIndicator();
     }
 
@@ -179,6 +199,7 @@ class MastermindGame {
         this.updateActiveIndicator();
         this.updateColorSelector();
         soundManager.gameStart();
+        this.updateAllSlotsDisplay();
     }
 
     generateSecretCode() {
@@ -215,6 +236,16 @@ class MastermindGame {
             }
 
             row.classList.remove('completed');
+        });
+
+        document.querySelectorAll('.feedback-row').forEach((row, index) => {
+            const points = row.querySelectorAll('.feedback-point');
+            points.forEach(point => point.className = 'feedback-point');
+            if (index === 0) {
+                row.classList.add('current-row');
+            } else {
+                row.classList.remove('current-row');
+            }
         });
 
         document.querySelectorAll('.secret-slot').forEach(slot => {
@@ -297,8 +328,8 @@ class MastermindGame {
         this.updateSingleSlot(this.selectedSlot, color);
     }
 
-    updateSingleSlot(index, color) {
-        const currentRowEl = document.querySelector('.guess-row.current-row');
+    updateSingleSlot(index, color, rowEl = null) {
+        const currentRowEl = rowEl || document.querySelector('.guess-row.current-row');
         const slot = currentRowEl.querySelector(`.guess-slot[data-index="${index}"]`);
 
         if (color) {
@@ -308,6 +339,54 @@ class MastermindGame {
             slot.style.backgroundColor = '#111111';
             slot.classList.remove('filled');
         }
+
+        // 显示数字
+        let numberEl = slot.querySelector('.slot-number');
+        if (this.showNumbers && color) {
+            const colorIndex = this.colors.indexOf(color);
+            if (!numberEl) {
+                numberEl = document.createElement('span');
+                numberEl.className = 'slot-number';
+                slot.appendChild(numberEl);
+            }
+            numberEl.textContent = colorIndex >= 0 ? (colorIndex + 1) : '';
+        } else {
+            if (numberEl) {
+                numberEl.remove();
+            }
+        }
+    }
+
+    updateAllSlotsDisplay() {
+        // 更新所有行的格子
+        document.querySelectorAll('.guess-row').forEach(rowEl => {
+            const rowIndex = parseInt(rowEl.dataset.row);
+            const guessData = rowIndex < this.guessHistory.length ? this.guessHistory[rowIndex] : null;
+            const slots = rowEl.querySelectorAll('.guess-slot');
+            slots.forEach((slot, index) => {
+                let color = null;
+                if (rowEl.classList.contains('current-row')) {
+                    color = this.currentGuess[index];
+                } else if (guessData) {
+                    color = guessData.guess[index];
+                }
+
+                let numberEl = slot.querySelector('.slot-number');
+                if (this.showNumbers && color) {
+                    const colorIndex = this.colors.indexOf(color);
+                    if (!numberEl) {
+                        numberEl = document.createElement('span');
+                        numberEl.className = 'slot-number';
+                        slot.appendChild(numberEl);
+                    }
+                    numberEl.textContent = colorIndex >= 0 ? (colorIndex + 1) : '';
+                } else {
+                    if (numberEl) {
+                        numberEl.remove();
+                    }
+                }
+            });
+        });
     }
 
     updateCurrentGuessDisplay() {
@@ -333,7 +412,10 @@ class MastermindGame {
     }
 
     submitGuess() {
-        if (this.gameOver) return;
+        if (this.gameOver) {
+            this.startNewGame();
+            return;
+        }
 
         if (this.currentGuess.includes(null)) {
             return;
@@ -367,6 +449,7 @@ class MastermindGame {
         }
 
         this.updateUI();
+        this.updateAllSlotsDisplay();
     }
 
     clearActiveIndicator() {
@@ -494,6 +577,7 @@ class MastermindGame {
     }
 
     changeDisplayMode(mode) {
+        this.displayMode = mode;
         const modeSwitch = document.querySelector('.mode-switch');
 
         if (mode === 'grid') {
@@ -505,14 +589,8 @@ class MastermindGame {
 
     updateUI() {
         const submitBtn = document.getElementById('submit-btn');
-
-        if (this.gameOver) {
-            submitBtn.style.opacity = '0.5';
-            submitBtn.style.pointerEvents = 'none';
-        } else {
-            submitBtn.style.opacity = '1';
-            submitBtn.style.pointerEvents = 'auto';
-        }
+        submitBtn.style.opacity = '1';
+        submitBtn.style.pointerEvents = 'auto';
     }
 
     showModal(title, message) {
@@ -558,9 +636,11 @@ class MastermindGame {
     handleKeyPress(e) {
         if (e.key >= '1' && e.key <= '7') {
             const index = parseInt(e.key) - 1;
-            const slots = document.querySelectorAll('.guess-row.current-row .guess-slot');
-            if (slots[index]) {
-                slots[index].click();
+            const availableColors = this.colors.slice(0, this.currentDifficulty.colors);
+            if (index < availableColors.length && this.selectedSlot !== null && !this.gameOver) {
+                this.placeColor(availableColors[index]);
+                soundManager.selectColor();
+                this.confirmSlot();
             }
         }
 
@@ -589,6 +669,11 @@ class MastermindGame {
         }
 
         if (e.key === 'Escape') {
+        }
+
+        if (e.key === 'h' || e.key === 'H') {
+            this.showNumbers = !this.showNumbers;
+            this.updateAllSlotsDisplay();
         }
     }
 }
