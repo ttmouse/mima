@@ -821,23 +821,27 @@ class MastermindGame {
         const panel = document.getElementById('history-panel');
         if (!panel) return;
 
-        const bestRecords = this.getBestRecords();
+        const history = this.getHistory();
         const recentRecords = this.getRecentRecords(10);
 
-        // 更新最佳记录
-        const bestContainer = panel.querySelector('.best-records');
-        if (bestContainer) {
-            bestContainer.innerHTML = '';
+        // 统计各难度累计次数
+        const stats = { 4: { total: 0, won: 0 }, 5: { total: 0, won: 0 }, 6: { total: 0, won: 0 }, 7: { total: 0, won: 0 } };
+        history.forEach(record => {
+            if (stats[record.difficulty]) {
+                stats[record.difficulty].total++;
+                if (record.won) stats[record.difficulty].won++;
+            }
+        });
+
+        // 更新累计统计
+        const statsContainer = panel.querySelector('.best-records');
+        if (statsContainer) {
+            statsContainer.innerHTML = '';
             [4, 5, 6, 7].forEach(colors => {
-                const record = bestRecords[colors];
                 const div = document.createElement('div');
                 div.className = 'best-item';
-                if (record) {
-                    div.innerHTML = `<span class="best-level">L0${colors}</span><span class="best-attempts">${record.attempts}次</span>`;
-                } else {
-                    div.innerHTML = `<span class="best-level">L0${colors}</span><span class="best-attempts no-record">-</span>`;
-                }
-                bestContainer.appendChild(div);
+                div.innerHTML = `<span class="best-level">L0${colors}</span><span class="best-attempts">${stats[colors].won}/${stats[colors].total}</span>`;
+                statsContainer.appendChild(div);
             });
         }
 
