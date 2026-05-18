@@ -927,6 +927,11 @@ body {
     .record-date {
         color: #666;
         font-size: 9px;
+        cursor: default;
+    }
+
+    .record-date:hover {
+        color: #999;
     }
 
     .record-level {
@@ -1004,6 +1009,27 @@ body {
 .detail-result.lost {
     background: rgba(255, 255, 255, 0.1);
     color: #888;
+}
+
+.detail-time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.detail-time .detail-label {
+    font-size: 11px;
+    color: #888;
+}
+
+.detail-time .time-value {
+    font-size: 13px;
+    color: #ccc;
+    font-weight: 500;
 }
 
 .detail-stats {

@@ -817,6 +817,16 @@ class MastermindGame {
         }
     }
 
+    // 格式化完整日期时间 "5/18 14:32"
+    formatFullDate(timestamp) {
+        const date = new Date(timestamp);
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${month}/${day} ${hours}:${minutes}`;
+    }
+
     updateHistoryPanel() {
         const panel = document.getElementById('history-panel');
         if (!panel) return;
@@ -857,7 +867,7 @@ class MastermindGame {
                     div.className = 'record-item' + (record.won ? ' won' : ' lost');
                     div.dataset.id = record.id;
                     div.innerHTML = `
-                        <span class="record-date">${this.formatDate(record.timestamp)}</span>
+                        <span class="record-date" title="${this.formatFullDate(record.timestamp)}">${this.formatDate(record.timestamp)}</span>
                         <span class="record-level">L0${record.difficulty}</span>
                         <span class="record-result">${record.won ? '✓' : '✗'}</span>
                         <span class="record-attempts">${record.attempts}次</span>
@@ -877,6 +887,10 @@ class MastermindGame {
             <div class="detail-header">
                 <span class="detail-level">L0${record.difficulty}</span>
                 <span class="detail-result ${record.won ? 'won' : 'lost'}">${record.won ? '通关' : '失败'}</span>
+            </div>
+            <div class="detail-time">
+                <span class="detail-label">记录时间</span>
+                <span class="time-value">${this.formatFullDate(record.timestamp)}</span>
             </div>
             <div class="detail-stats">
                 <div class="stat-item">
