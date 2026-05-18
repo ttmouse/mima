@@ -822,3 +822,325 @@ body {
     pointer-events: none;
     border-radius: 6px;
 }
+
+/* ========== 历史记录面板 ========== */
+.history-panel {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .game-container {
+        max-width: 600px;
+    }
+
+    .history-panel {
+        display: block;
+        position: fixed;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        width: 180px;
+        background: linear-gradient(145deg, #2d5428, #1a3318);
+        border-radius: 12px;
+        padding: 12px;
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        border: 2px solid #1a1a1a;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .history-section {
+        margin-bottom: 12px;
+    }
+
+    .history-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .section-title {
+        font-size: 11px;
+        color: #a8d5a2;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .best-records {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+
+    .best-item {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+        padding: 6px 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .best-level {
+        font-size: 10px;
+        color: #888;
+    }
+
+    .best-attempts {
+        font-size: 14px;
+        color: #4ade80;
+        font-weight: bold;
+    }
+
+    .best-attempts.no-record {
+        color: #555;
+    }
+
+    .recent-records {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .record-item {
+        display: grid;
+        grid-template-columns: 40px 20px 30px 40px;
+        align-items: center;
+        gap: 4px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+        padding: 6px 8px;
+        font-size: 11px;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+
+    .record-item:hover {
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    .record-item.won .record-result {
+        color: #4ade80;
+    }
+
+    .record-item.lost .record-result {
+        color: #f87171;
+    }
+
+    .record-level {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .record-result {
+        font-weight: bold;
+    }
+
+    .record-attempts {
+        color: #aaa;
+    }
+
+    .record-time {
+        color: #888;
+        text-align: right;
+    }
+
+    .no-record {
+        color: #555;
+        text-align: center;
+        font-size: 11px;
+        padding: 10px;
+    }
+}
+
+/* ========== 记录详情弹窗 ========== */
+.record-detail {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, #2d5428, #1a3318);
+    border-radius: 12px;
+    padding: 16px;
+    min-width: 280px;
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 2px solid #1a1a1a;
+    z-index: 1000;
+}
+
+.record-detail.show {
+    display: block;
+}
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-level {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.detail-result {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.detail-result.won {
+    background: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+}
+
+.detail-result.lost {
+    background: rgba(248, 113, 113, 0.2);
+    color: #f87171;
+}
+
+.detail-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.stat-item {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.detail-secret {
+    margin-bottom: 12px;
+}
+
+.detail-label {
+    display: block;
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 6px;
+}
+
+.secret-colors {
+    display: flex;
+    gap: 6px;
+}
+
+.secret-color {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.detail-guesses {
+    margin-bottom: 12px;
+}
+
+.guess-row-detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.guess-row-detail:last-child {
+    border-bottom: none;
+}
+
+.guess-num {
+    width: 16px;
+    font-size: 10px;
+    color: #666;
+}
+
+.guess-colors {
+    display: flex;
+    gap: 4px;
+}
+
+.guess-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+}
+
+.guess-feedback {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+    font-size: 11px;
+}
+
+.feedback-correct {
+    color: #4ade80;
+}
+
+.feedback-misplaced {
+    color: #fff;
+}
+
+.detail-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-actions button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-delete {
+    background: rgba(248, 113, 113, 0.2);
+    color: #f87171;
+}
+
+.btn-delete:hover {
+    background: rgba(248, 113, 113, 0.3);
+}
+
+.btn-close {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.btn-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}

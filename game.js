@@ -37,6 +37,8 @@ class MastermindGame {
         this.displayMode = 'grid';
         this.showNumbers = true;
         this.level = 1;
+        this.startTime = null;
+        this.attempts = 0;
 
         this.init();
     }
@@ -196,6 +198,8 @@ class MastermindGame {
         this.selectedColor = null;
         this.gameOver = false;
         this.level = this.currentDifficulty.colors; // LCD显示难度（颜色数量）
+        this.startTime = Date.now();
+        this.attempts = 0;
 
         this.resetBoard();
         this.updateUI();
@@ -430,6 +434,8 @@ class MastermindGame {
 
         const feedback = this.calculateFeedback(this.currentGuess, this.secretCode);
 
+        this.attempts++;
+
         this.guessHistory.push({
             guess: [...this.currentGuess],
             feedback: feedback
@@ -444,10 +450,12 @@ class MastermindGame {
         if (feedback.correct === this.codeLength) {
             this.gameOver = true;
             this.revealSecretCode();
+            this.saveGameRecord(true);
             soundManager.gameWin();
         } else if (this.remainingGuesses === 0) {
             this.gameOver = true;
             this.revealSecretCode();
+            this.saveGameRecord(false);
             soundManager.gameLose();
         } else {
             this.moveToNextRow();
@@ -706,8 +714,197 @@ class MastermindGame {
             this.updateAllSlotsDisplay();
         }
     }
+
+    // ========== 历史记录管理 ==========
+
+    getHistory() {
+        const history = localStorage.getItem('mima_history');
+        return history ? JSON.parse(history) : [];
+    }
+
+    saveHistory(history) {
+        localStorage.setItem('mima_history', JSON.stringify(history));
+    }
+
+    saveGameRecord(won) {
+        const timeSpent = Math.round((Date.now() - this.startTime) / 1000);
+        const record = {
+            id: Date.now(),
+            difficulty: this.currentDifficulty.colors,
+            attempts: this.attempts,
+            timeSpent: timeSpent,
+            won: won,
+            secretCode: won ? [...this.secretCode] : null,
+            guessHistory: [...this.guessHistory],
+            timestamp: Date.now()
+        };
+
+        const history = this.getHistory();
+        history.unshift(record);
+        // 最多保存50条
+        if (history.length > 50) {
+            history.pop();
+        }
+        this.saveHistory(history);
+        this.updateHistoryPanel();
+    }
+
+    getBestRecords() {
+        const history = this.getHistory();
+        const best = {};
+        [4, 5, 6, 7].forEach(colors => {
+            best[colors] = null;
+        });
+
+        history.forEach(record => {
+            if (record.won) {
+                if (best[record.difficulty] === null || record.attempts < best[record.difficulty].attempts) {
+                    best[record.difficulty] = record;
+                }
+            }
+        });
+
+        return best;
+    }
+
+    getRecentRecords(limit = 10) {
+        const history = this.getHistory();
+        return history.slice(0, limit);
+    }
+
+    deleteRecord(id) {
+        const history = this.getHistory();
+        const filtered = history.filter(r => r.id !== id);
+        this.saveHistory(filtered);
+        this.updateHistoryPanel();
+    }
+
+    clearHistory() {
+        this.saveHistory([]);
+        this.updateHistoryPanel();
+    }
+
+    formatTime(seconds) {
+        if (seconds < 60) {
+            return seconds + 's';
+        }
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return mins + ':' + secs.toString().padStart(2, '0');
+    }
+
+    updateHistoryPanel() {
+        const panel = document.getElementById('history-panel');
+        if (!panel) return;
+
+        const bestRecords = this.getBestRecords();
+        const recentRecords = this.getRecentRecords(10);
+
+        // 更新最佳记录
+        const bestContainer = panel.querySelector('.best-records');
+        if (bestContainer) {
+            bestContainer.innerHTML = '';
+            [4, 5, 6, 7].forEach(colors => {
+                const record = bestRecords[colors];
+                const div = document.createElement('div');
+                div.className = 'best-item';
+                if (record) {
+                    div.innerHTML = `<span class="best-level">L0${colors}</span><span class="best-attempts">${record.attempts}次</span>`;
+                } else {
+                    div.innerHTML = `<span class="best-level">L0${colors}</span><span class="best-attempts no-record">-</span>`;
+                }
+                bestContainer.appendChild(div);
+            });
+        }
+
+        // 更新最近战绩
+        const recentContainer = panel.querySelector('.recent-records');
+        if (recentContainer) {
+            recentContainer.innerHTML = '';
+            if (recentRecords.length === 0) {
+                recentContainer.innerHTML = '<div class="no-record">暂无记录</div>';
+            } else {
+                recentRecords.forEach(record => {
+                    const div = document.createElement('div');
+                    div.className = 'record-item' + (record.won ? ' won' : ' lost');
+                    div.dataset.id = record.id;
+                    div.innerHTML = `
+                        <span class="record-level">L0${record.difficulty}</span>
+                        <span class="record-result">${record.won ? '✓' : '✗'}</span>
+                        <span class="record-attempts">${record.attempts}次</span>
+                        <span class="record-time">${record.won ? this.formatTime(record.timeSpent) : '-'}</span>
+                    `;
+                    div.addEventListener('click', () => this.showRecordDetail(record));
+                    recentContainer.appendChild(div);
+                });
+            }
+        }
+    }
+
+    showRecordDetail(record) {
+        const detail = document.getElementById('record-detail');
+        if (!detail) return;
+
+        detail.innerHTML = `
+            <div class="detail-header">
+                <span class="detail-level">L0${record.difficulty}</span>
+                <span class="detail-result ${record.won ? 'won' : 'lost'}">${record.won ? '通关' : '失败'}</span>
+            </div>
+            <div class="detail-stats">
+                <div class="stat-item">
+                    <span class="stat-label">尝试次数</span>
+                    <span class="stat-value">${record.attempts}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">用时</span>
+                    <span class="stat-value">${record.won ? this.formatTime(record.timeSpent) : '-'}</span>
+                </div>
+            </div>
+            ${record.won && record.secretCode ? `
+            <div class="detail-secret">
+                <span class="detail-label">正确答案</span>
+                <div class="secret-colors">
+                    ${record.secretCode.map(c => `<div class="secret-color" style="background:${this.getColorHex(c)}"></div>`).join('')}
+                </div>
+            </div>
+            ` : ''}
+            <div class="detail-guesses">
+                <span class="detail-label">猜测过程</span>
+                ${record.guessHistory.map((g, i) => `
+                    <div class="guess-row-detail">
+                        <span class="guess-num">${i + 1}</span>
+                        <div class="guess-colors">
+                            ${g.guess.map(c => `<div class="guess-color" style="background:${this.getColorHex(c)}"></div>`).join('')}
+                        </div>
+                        <span class="guess-feedback">
+                            <span class="feedback-correct">${g.feedback.correct}</span>
+                            <span class="feedback-misplaced">${g.feedback.misplaced}</span>
+                        </span>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="detail-actions">
+                <button class="btn-delete" onclick="game.deleteRecord(${record.id})">删除</button>
+                <button class="btn-close" onclick="game.closeRecordDetail()">关闭</button>
+            </div>
+        `;
+        detail.style.display = 'block';
+    }
+
+    closeRecordDetail() {
+        const detail = document.getElementById('record-detail');
+        if (detail) {
+            detail.style.display = 'none';
+        }
+    }
+
+    initHistoryPanel() {
+        this.updateHistoryPanel();
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new MastermindGame();
+    const game = new MastermindGame();
+    game.initHistoryPanel();
+    window.game = game;
 });
