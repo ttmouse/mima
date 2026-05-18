@@ -888,9 +888,9 @@ class MastermindGame {
                 <span class="detail-level">L0${record.difficulty}</span>
                 <span class="detail-result ${record.won ? 'won' : 'lost'}">${record.won ? '通关' : '失败'}</span>
             </div>
-            <div class="detail-time">
-                <span class="detail-label">记录时间</span>
-                <span class="time-value">${this.formatFullDate(record.timestamp)}</span>
+            <div class="detail-date">
+                <span class="date-icon">📅</span>
+                <span class="date-value">${this.formatFullDate(record.timestamp)}</span>
             </div>
             <div class="detail-stats">
                 <div class="stat-item">

@@ -899,6 +899,25 @@ body {
         overflow-y: auto;
     }
 
+    /* 自定义滚动条 - 与游戏界面协调 */
+    .recent-records::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .recent-records::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+    }
+
+    .recent-records::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 3px;
+    }
+
+    .recent-records::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
     .record-item {
         display: grid;
         grid-template-columns: 36px 32px 18px 28px;
@@ -975,6 +994,25 @@ body {
     z-index: 1000;
 }
 
+/* 详情弹窗自定义滚动条 */
+.record-detail::-webkit-scrollbar {
+    width: 6px;
+}
+
+.record-detail::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+}
+
+.record-detail::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+
+.record-detail::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
 .record-detail.show {
     display: block;
 }
@@ -1009,6 +1047,26 @@ body {
 .detail-result.lost {
     background: rgba(255, 255, 255, 0.1);
     color: #888;
+}
+
+.detail-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.date-icon {
+    font-size: 14px;
+}
+
+.date-value {
+    font-size: 14px;
+    color: #ccc;
+    font-weight: 500;
 }
 
 .detail-time {
