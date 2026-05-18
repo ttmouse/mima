@@ -478,12 +478,25 @@ body {
     position: relative;
     border-radius: 50%;
     background:
-        repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 2px,
-            rgba(0, 0, 0, 0.08) 2px,
-            rgba(0, 0, 0, 0.08) 3px
+        radial-gradient(
+            circle at center,
+            transparent 0%,
+            transparent 20%,
+            rgba(0, 0, 0, 0.06) 20%,
+            rgba(0, 0, 0, 0.06) 22%,
+            transparent 22%,
+            transparent 40%,
+            rgba(0, 0, 0, 0.06) 40%,
+            rgba(0, 0, 0, 0.06) 42%,
+            transparent 42%,
+            transparent 60%,
+            rgba(0, 0, 0, 0.06) 60%,
+            rgba(0, 0, 0, 0.06) 62%,
+            transparent 62%,
+            transparent 80%,
+            rgba(0, 0, 0, 0.06) 80%,
+            rgba(0, 0, 0, 0.06) 82%,
+            transparent 82%
         ),
         linear-gradient(180deg, #ff8c5a, #ff6b3d, #e55a2b);
     box-shadow:
@@ -494,24 +507,50 @@ body {
 
 .submit-btn:hover {
     background:
-        repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 2px,
-            rgba(0, 0, 0, 0.06) 2px,
-            rgba(0, 0, 0, 0.06) 3px
+        radial-gradient(
+            circle at center,
+            transparent 0%,
+            transparent 20%,
+            rgba(0, 0, 0, 0.05) 20%,
+            rgba(0, 0, 0, 0.05) 22%,
+            transparent 22%,
+            transparent 40%,
+            rgba(0, 0, 0, 0.05) 40%,
+            rgba(0, 0, 0, 0.05) 42%,
+            transparent 42%,
+            transparent 60%,
+            rgba(0, 0, 0, 0.05) 60%,
+            rgba(0, 0, 0, 0.05) 62%,
+            transparent 62%,
+            transparent 80%,
+            rgba(0, 0, 0, 0.05) 80%,
+            rgba(0, 0, 0, 0.05) 82%,
+            transparent 82%
         ),
         linear-gradient(180deg, #ffa070, #ff8c5a, #ff6b3d);
 }
 
 .submit-btn:active {
     background:
-        repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 2px,
-            rgba(0, 0, 0, 0.12) 2px,
-            rgba(0, 0, 0, 0.12) 3px
+        radial-gradient(
+            circle at center,
+            transparent 0%,
+            transparent 20%,
+            rgba(0, 0, 0, 0.1) 20%,
+            rgba(0, 0, 0, 0.1) 22%,
+            transparent 22%,
+            transparent 40%,
+            rgba(0, 0, 0, 0.1) 40%,
+            rgba(0, 0, 0, 0.1) 42%,
+            transparent 42%,
+            transparent 60%,
+            rgba(0, 0, 0, 0.1) 60%,
+            rgba(0, 0, 0, 0.1) 62%,
+            transparent 62%,
+            transparent 80%,
+            rgba(0, 0, 0, 0.1) 80%,
+            rgba(0, 0, 0, 0.1) 82%,
+            transparent 82%
         ),
         linear-gradient(180deg, #e55a2b, #cc4a1b, #b33a0f);
     box-shadow:
@@ -578,7 +617,7 @@ body {
     height: calc(100% - 6px);
     background:
         repeating-linear-gradient(
-            0deg,
+            90deg,
             transparent 0px,
             transparent 2px,
             rgba(0, 0, 0, 0.12) 2px,
