@@ -35,7 +35,7 @@ class MastermindGame {
         this.selectedColor = null;
         this.gameOver = false;
         this.displayMode = 'grid';
-        this.showNumbers = false;
+        this.showNumbers = true;
 
         this.init();
     }
