@@ -916,7 +916,11 @@ class MastermindGame {
                     <div class="guess-row-detail">
                         <span class="guess-num">${i + 1}</span>
                         <div class="guess-colors">
-                            ${g.guess.map(c => `<div class="guess-color" style="background:${this.getColorHex(c)}"></div>`).join('')}
+                            ${g.guess.map(c => {
+                                const colorIndex = this.colors.indexOf(c);
+                                const num = colorIndex >= 0 ? colorIndex + 1 : '';
+                                return `<div class="guess-color" style="background:${this.getColorHex(c)}">${num}</div>`;
+                            }).join('')}
                         </div>
                         <span class="guess-feedback">
                             <span class="feedback-correct">${g.feedback.correct}</span>
