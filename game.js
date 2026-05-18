@@ -793,6 +793,30 @@ class MastermindGame {
         return mins + ':' + secs.toString().padStart(2, '0');
     }
 
+    formatDate(timestamp) {
+        const now = Date.now();
+        const diff = now - timestamp;
+        const day = 24 * 60 * 60 * 1000;
+
+        if (diff < day) {
+            // 今天
+            const date = new Date(timestamp);
+            return date.getHours().toString().padStart(2, '0') + ':' +
+                   date.getMinutes().toString().padStart(2, '0');
+        } else if (diff < 2 * day) {
+            // 昨天
+            return '昨天';
+        } else if (diff < 7 * day) {
+            // 一周内
+            const days = ['日', '一', '二', '三', '四', '五', '六'];
+            return '周' + days[new Date(timestamp).getDay()];
+        } else {
+            // 更早
+            const date = new Date(timestamp);
+            return (date.getMonth() + 1) + '/' + date.getDate();
+        }
+    }
+
     updateHistoryPanel() {
         const panel = document.getElementById('history-panel');
         if (!panel) return;
@@ -829,10 +853,10 @@ class MastermindGame {
                     div.className = 'record-item' + (record.won ? ' won' : ' lost');
                     div.dataset.id = record.id;
                     div.innerHTML = `
+                        <span class="record-date">${this.formatDate(record.timestamp)}</span>
                         <span class="record-level">L0${record.difficulty}</span>
                         <span class="record-result">${record.won ? '✓' : '✗'}</span>
                         <span class="record-attempts">${record.attempts}次</span>
-                        <span class="record-time">${record.won ? this.formatTime(record.timeSpent) : '-'}</span>
                     `;
                     div.addEventListener('click', () => this.showRecordDetail(record));
                     recentContainer.appendChild(div);

@@ -901,13 +901,13 @@ body {
 
     .record-item {
         display: grid;
-        grid-template-columns: 40px 20px 30px 40px;
+        grid-template-columns: 36px 32px 18px 28px;
         align-items: center;
         gap: 4px;
         background: rgba(255, 255, 255, 0.1);
         border-radius: 6px;
         padding: 6px 8px;
-        font-size: 11px;
+        font-size: 10px;
         cursor: pointer;
         transition: background 0.15s;
     }
@@ -921,7 +921,12 @@ body {
     }
 
     .record-item.lost .record-result {
-        color: #888;
+        color: #666;
+    }
+
+    .record-date {
+        color: #666;
+        font-size: 9px;
     }
 
     .record-level {
@@ -934,12 +939,7 @@ body {
     }
 
     .record-attempts {
-        color: #aaa;
-    }
-
-    .record-time {
         color: #888;
-        text-align: right;
     }
 
     .no-record {
