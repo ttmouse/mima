@@ -823,20 +823,13 @@ body {
     border-radius: 6px;
 }
 
-/* ========== 页面布局 ========== */
-.page-layout {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 10px;
-    width: 100%;
-    max-width: 100%;
-}
-
-/* ========== 历史记录面板 ========== */
+/* ========== 历史记录面板 (悬浮侧边栏) ========== */
 .history-panel {
     display: none;
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
     width: 180px;
     background: linear-gradient(145deg, #2d5428, #1a3318);
     border-radius: 12px;
@@ -845,12 +838,11 @@ body {
         0 8px 24px rgba(0, 0, 0, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
     border: 2px solid #1a1a1a;
-    max-height: 90vh;
+    max-height: 80vh;
     overflow-y: auto;
-    flex-shrink: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 600px) {
     .history-panel {
         display: block;
     }
