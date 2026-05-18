@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>密码机 - Mastermind</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="game-container">
@@ -268,6 +269,14 @@
                 </svg>
             </div>
 
+            <!-- 液晶屏显示 - 可点击切换难度 -->
+            <div id="lcd-screen" class="lcd-screen clickable" title="点击切换难度">
+                <div class="lcd-display">
+                    <div class="lcd-label">LEVEL</div>
+                    <div id="lcd-level" class="lcd-number">L04</div>
+                </div>
+            </div>
+
             <div class="submit-btn-slot">
                 <button id="submit-btn" class="submit-btn" title="提交"></button>
             </div>
@@ -281,6 +290,7 @@
                 <button id="modal-btn" class="btn btn-primary">再玩一次</button>
             </div>
         </div>
+
     </div>
 
     <script src="sound.js"></script>

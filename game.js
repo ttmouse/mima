@@ -13,12 +13,12 @@ class MastermindGame {
         };
         this.colorThreshold = 5;
 
-        // 难度等级定义
+        // 难度等级定义 - codeLength固定为4，colors决定可用颜色数量
         this.DIFFICULTY = {
             EASY: { name: '简单', codeLength: 4, colors: 4 },
-            NORMAL: { name: '普通', codeLength: 5, colors: 5 },
-            HARD: { name: '困难', codeLength: 6, colors: 6 },
-            EXTREME: { name: '极难', codeLength: 7, colors: 7 }
+            NORMAL: { name: '普通', codeLength: 4, colors: 5 },
+            HARD: { name: '困难', codeLength: 4, colors: 6 },
+            EXTREME: { name: '极难', codeLength: 4, colors: 7 }
         };
 
         // 从 localStorage 读取已解锁的难度
@@ -36,6 +36,7 @@ class MastermindGame {
         this.gameOver = false;
         this.displayMode = 'grid';
         this.showNumbers = true;
+        this.level = 1;
 
         this.init();
     }
@@ -43,10 +44,12 @@ class MastermindGame {
     init() {
         this.bindEvents();
         this.startNewGame();
+        this.updateLCDDisplay();
     }
 
     bindEvents() {
         document.getElementById('submit-btn').addEventListener('click', () => this.submitGuess());
+        document.getElementById('lcd-screen').addEventListener('click', () => this.cycleDifficulty());
         document.getElementById('modal-btn').addEventListener('click', () => {
             this.hideModal();
             this.startNewGame();
@@ -192,9 +195,11 @@ class MastermindGame {
         this.selectedSlot = 0;
         this.selectedColor = null;
         this.gameOver = false;
+        this.level = this.currentDifficulty.colors; // LCD显示难度（颜色数量）
 
         this.resetBoard();
         this.updateUI();
+        this.updateLCDDisplay();
         this.clearSideFeedback();
         this.updateActiveIndicator();
         this.updateColorSelector();
@@ -593,6 +598,15 @@ class MastermindGame {
         submitBtn.style.pointerEvents = 'auto';
     }
 
+    updateLCDDisplay() {
+        const lcdNumber = document.getElementById('lcd-level');
+        if (lcdNumber) {
+            // 格式：L + 两位数字（如 L04, L05, L06, L07）
+            const num = this.level.toString().padStart(2, '0');
+            lcdNumber.textContent = 'L' + num;
+        }
+    }
+
     showModal(title, message) {
         document.getElementById('modal-title').textContent = title;
         document.getElementById('modal-message').textContent = message;
@@ -631,6 +645,22 @@ class MastermindGame {
         this.currentDifficulty = difficulty;
         this.codeLength = difficulty.codeLength;
         this.startNewGame(difficulty);
+    }
+
+    cycleDifficulty() {
+        // 难度循环：EASY → NORMAL → HARD → EXTREME → EASY
+        const difficulties = [
+            this.DIFFICULTY.EASY,
+            this.DIFFICULTY.NORMAL,
+            this.DIFFICULTY.HARD,
+            this.DIFFICULTY.EXTREME
+        ];
+        const currentIndex = difficulties.indexOf(this.currentDifficulty);
+        const nextIndex = (currentIndex + 1) % difficulties.length;
+        const targetDifficulty = difficulties[nextIndex];
+
+        this.setDifficulty(targetDifficulty);
+        soundManager.click();
     }
 
     handleKeyPress(e) {

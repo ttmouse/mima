@@ -753,3 +753,72 @@ body {
         0 1px 0 #2d6b2d,
         0 2px 3px rgba(0, 0, 0, 0.2);
 }
+
+/* Digital-7 字体声明 */
+@font-face {
+    font-family: 'Digital7';
+    src: url('fonts/digital-7.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 底部液晶屏效果 */
+.lcd-screen {
+    position: relative;
+    background: linear-gradient(145deg, #0a0a0a, #151515);
+    border-radius: 8px;
+    padding: 6px 14px;
+    box-shadow:
+        inset 0 2px 6px rgba(0, 0, 0, 0.9),
+        0 1px 0 rgba(255, 255, 255, 0.05);
+    border: 2px solid #1a1a1a;
+}
+
+.lcd-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.lcd-label {
+    font-family: 'Courier New', monospace;
+    font-size: 7px;
+    font-weight: bold;
+    color: #3a5a3a;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.lcd-number {
+    font-family: 'Digital7', monospace;
+    font-size: 32px;
+    color: #4ade80;
+    text-shadow:
+        0 0 6px rgba(74, 222, 128, 0.9),
+        0 0 12px rgba(74, 222, 128, 0.6),
+        0 0 18px rgba(74, 222, 128, 0.4);
+    letter-spacing: 4px;
+    line-height: 1;
+}
+
+/* 可点击的 LCD 屏幕 */
+.lcd-screen.clickable {
+    cursor: pointer;
+}
+
+/* 扫描线效果 */
+.lcd-screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 1px,
+        rgba(0, 0, 0, 0.15) 1px,
+        rgba(0, 0, 0, 0.15) 2px
+    );
+    pointer-events: none;
+    border-radius: 6px;
+}
