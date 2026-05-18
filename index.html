@@ -8,7 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="game-container">
+    <div class="page-layout">
+        <div class="game-container">
 
 
         <div class="game-layout">
@@ -281,23 +282,24 @@
                 <button id="submit-btn" class="submit-btn" title="提交"></button>
             </div>
         </div>
+    </div>
 
-        <!-- 历史记录面板 (PC端显示) -->
-        <div id="history-panel" class="history-panel">
-            <div class="history-section">
-                <div class="section-title">🏆 最短通关</div>
-                <div class="best-records"></div>
-            </div>
-            <div class="history-section">
-                <div class="section-title">📜 最近战绩</div>
-                <div class="recent-records"></div>
-            </div>
+    <!-- 历史记录面板 (PC端显示) -->
+    <div id="history-panel" class="history-panel">
+        <div class="history-section">
+            <div class="section-title">🏆 最短通关</div>
+            <div class="best-records"></div>
         </div>
+        <div class="history-section">
+            <div class="section-title">📜 最近战绩</div>
+            <div class="recent-records"></div>
+        </div>
+    </div>
 
-        <!-- 记录详情弹窗 -->
-        <div id="record-detail" class="record-detail"></div>
+    <!-- 记录详情弹窗 -->
+    <div id="record-detail" class="record-detail"></div>
 
-        <div id="modal" class="modal">
+    <div id="modal" class="modal">
             <div class="modal-content">
                 <h2 id="modal-title"></h2>
                 <p id="modal-message"></p>
