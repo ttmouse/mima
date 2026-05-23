@@ -1,16 +1,16 @@
 class MastermindGame {
     constructor() {
-        // 7色定义 - 按用户指定顺序
-        this.colors = ['red', 'green', 'orange', 'blue', 'yellow', 'purple', 'cyan'];
-        this.colorRGB = {
-            'red': { r: 231, g: 76, b: 60 },
-            'green': { r: 46, g: 204, b: 113 },
-            'orange': { r: 230, g: 126, b: 34 },
-            'blue': { r: 52, g: 152, b: 219 },
-            'yellow': { r: 241, g: 196, b: 15 },
-            'purple': { r: 155, g: 89, b: 182 },
-            'cyan': { r: 0, g: 188, b: 212 }
+        // 7色定义 - 单一数据源（DRY原则）
+        this.COLORS = {
+            'red':    { rgb: { r: 231, g:  76, b:  60 }, hex: '#e74c3c' },
+            'green':  { rgb: { r:  46, g: 204, b: 113 }, hex: '#2ecc71' },
+            'orange': { rgb: { r: 230, g: 126, b:  34 }, hex: '#e67e22' },
+            'blue':   { rgb: { r:  52, g: 152, b: 219 }, hex: '#3498db' },
+            'yellow': { rgb: { r: 241, g: 196, b:  15 }, hex: '#f1c40f' },
+            'purple': { rgb: { r: 155, g:  89, b: 182 }, hex: '#9b59b6' },
+            'cyan':   { rgb: { r:   0, g: 188, b: 212 }, hex: '#00bcd4' }
         };
+        this.colors = Object.keys(this.COLORS);
         this.colorThreshold = 5;
 
         // 难度等级定义 - codeLength固定为4，colors决定可用颜色数量
@@ -266,8 +266,8 @@ class MastermindGame {
     }
 
     calculateColorDifference(color1, color2) {
-        const rgb1 = this.colorRGB[color1];
-        const rgb2 = this.colorRGB[color2];
+        const rgb1 = this.COLORS[color1].rgb;
+        const rgb2 = this.COLORS[color2].rgb;
         const diff = Math.abs(rgb1.r - rgb2.r) + Math.abs(rgb1.g - rgb2.g) + Math.abs(rgb1.b - rgb2.b);
         return diff;
     }
@@ -408,16 +408,7 @@ class MastermindGame {
     }
 
     getColorHex(color) {
-        const colorMap = {
-            'red': '#e74c3c',
-            'green': '#2ecc71',
-            'orange': '#e67e22',
-            'blue': '#3498db',
-            'yellow': '#f1c40f',
-            'purple': '#9b59b6',
-            'cyan': '#00bcd4'
-        };
-        return colorMap[color] || '#111111';
+        return this.COLORS[color]?.hex || '#111111';
     }
 
     submitGuess() {
